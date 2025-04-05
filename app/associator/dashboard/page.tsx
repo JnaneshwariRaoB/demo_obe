@@ -1,60 +1,53 @@
-'use client';
+'use client'
 
-export default function VisionMissionPEOPSOPO() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-[#120C1C] via-[#1F142B] to-[#0A0710] text-white font-serif p-10">
-      <div className="bg-[#1D1529]/70 border border-[#7E5AC8] rounded-2xl shadow-xl p-8 max-w-6xl mx-auto space-y-8">
+import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 
-        <Section title="Vision">
-          To be a center of excellence in technical education and research, nurturing professionals who contribute to the development of society.
-        </Section>
+const sections = [
+  'Academics',
+  'Research',
+  'Administration',
+  'Attendance',
+  'Mentor-Mentee',
+  'Examination',
+  'Feedback',
+] as const
+type Section = typeof sections[number]
 
-        <Section title="Mission">
-          To impart quality education and foster innovation through dedicated teaching and collaborative learning, enabling students to achieve professional competence and ethical values.
-        </Section>
-
-        <Section title="Program Educational Objectives (PEO)">
-          <ul className="list-disc ml-6 space-y-2 text-[#EADCF9]">
-            <li><b>PEO1:</b> Graduates will succeed in professional careers or higher education by acquiring knowledge in engineering and allied disciplines.</li>
-            <li><b>PEO2:</b> Graduates will demonstrate lifelong learning and adapt to evolving technologies.</li>
-            <li><b>PEO3:</b> Graduates will contribute ethically and responsibly to society through engineering solutions.</li>
-          </ul>
-        </Section>
-
-        <Section title="Program Outcomes (PO)">
-          <ul className="list-decimal ml-6 space-y-2 text-[#EADCF9]">
-            <li>Engineering knowledge</li>
-            <li>Problem analysis</li>
-            <li>Design/development of solutions</li>
-            <li>Conduct investigations of complex problems</li>
-            <li>Modern tool usage</li>
-            <li>The engineer and society</li>
-            <li>Environment and sustainability</li>
-            <li>Ethics</li>
-            <li>Individual and team work</li>
-            <li>Communication</li>
-            <li>Project management and finance</li>
-            <li>Life-long learning</li>
-          </ul>
-        </Section>
-
-        <Section title="Program Specific Outcomes (PSO)">
-          <ul className="list-disc ml-6 space-y-2 text-[#EADCF9]">
-            <li><b>PSO1:</b> Apply domain-specific knowledge to solve real-world engineering problems.</li>
-            <li><b>PSO2:</b> Demonstrate proficiency in modern tools and technologies relevant to the discipline.</li>
-          </ul>
-        </Section>
-
-      </div>
-    </div>
-  );
+const sectionRoutes: Record<Section, string> = {
+  'Academics': '/associator/dashboard/academics',
+  'Research': '/associator/dashboard/research',
+  'Administration': '/associator/dashboard/administration',
+  'Attendance': '/associator/dashboard/attendance',
+  'Mentor-Mentee': '/associator/dashboard/mentor-mentee',
+  'Examination': '/associator/dashboard/examination',
+  'Feedback': '/associator/dashboard/feedback',
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+export default function DashboardPage() {
+  const router = useRouter()
+
+  const handleNavigate = useCallback((section: Section) => {
+    const path = sectionRoutes[section]
+    router.push(path)
+  }, [router])
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-[#C5B0F3] mb-3 border-b border-[#7E5AC8] pb-1">{title}</h2>
-      <p className="text-lg leading-relaxed text-[#EADCF9]">{children}</p>
+    <div className="min-h-screen bg-gradient-to-br from-[#0D0B1F] via-[#1A132B] to-[#110A1C] text-white font-serif flex flex-col items-center justify-center p-8">
+      <h1 className="text-5xl font-extrabold text-[#EADCF9] mb-12 tracking-wider">Dashboard</h1>
+
+      {/* Dashboard Buttons */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl mb-12">
+        {sections.map((section) => (
+          <button
+            key={section}
+            onClick={() => handleNavigate(section)}
+            className={`w-full px-6 py-4 rounded-2xl font-bold text-lg transition-all duration-300 tracking-wide bg-[#2B1F3A] text-[#BBAAD3] hover:bg-[#4D3A74] hover:scale-[1.02]`}
+          >
+            {section}
+          </button>
+        ))}
+      </div>
     </div>
-  );
+  )
 }

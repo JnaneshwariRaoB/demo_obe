@@ -4,7 +4,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <div>
       <h2 className="text-2xl font-bold text-[#C5B0F3] mb-3 border-b border-[#7E5AC8] pb-1">{title}</h2>
-      <p className="text-lg leading-relaxed text-[#EADCF9]">{children}</p>
+      <div className="text-lg leading-relaxed text-[#EADCF9]">{children}</div>
     </div>
   );
 }
@@ -18,8 +18,8 @@ export default function VisionMissionPEOPSOPO() {
           To be a center of excellence...
         </Section>
 
-        {/* All other sections here... */}
-        
+        {/* Add other sections here the same way */}
+
       </div>
     </div>
   );
