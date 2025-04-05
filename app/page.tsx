@@ -1,103 +1,161 @@
-import Image from "next/image";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+
+
+const images: string[] = [
+  "https://i.ytimg.com/vi/ukwWT50TZcw/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AHUBoAC4AOKAgwIABABGFMgRShyMA8=&rs=AOn4CLDrZ1CfI7uEhvBRBu4BviZm3BoX4Q",
+  "https://www.sahyadri.edu.in/_next/image?url=%2Fimages%2Fstudents%2Flaunchpads.jpg&w=1920&q=75",
+  "https://www.sahyadri.edu.in/_next/image?url=%2Fimages%2Fhome%2Fcollegeaerial.jpg&w=3840&q=75",
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const router = useRouter();
+  const [currentImage, setCurrentImage] = useState<number>(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="dashboard-container">
+      <div className="carousel">
+        <img
+          src={images[currentImage]}
+          alt="Campus View"
+          className="carousel-image"
+        />
+      </div>
+
+      <nav className="navbar">
+        <h2 className="navbar-title">
+          Sahyadri College of Engineering & Management
+        </h2>
+        <div className="nav-links">
+          <a href="https://www.sahyadri.edu.in/home">Home</a>
+          <a href="https://www.sahyadri.edu.in/vision-and-mission">About</a>
+          <a href="https://www.sahyadri.edu.in/contact">Contact Us</a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </nav>
+
+      <div className="dashboard-content">
+        <h1 className="dashboard-title">Welcome to the Dashboard</h1>
+        <p className="dashboard-subtitle">Select a role to proceed</p>
+        <button className="btn-primary" onClick={() => router.push('/auth/Login')}>
+          Get Started
+        </button>
+      </div>
+
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="footer-section">
+            <h3>SAHYADRI COLLEGE OF ENGINEERING & MANAGEMENT</h3>
+            <p>An Autonomous Institution, Mangaluru</p>
+          </div>
+          <div className="footer-section">
+            <h4>Phone</h4>
+            <p>+91 824 2277222/333</p>
+            <p>+91 94498 45959</p>
+          </div>
+          <div className="footer-section">
+            <h4>Email</h4>
+            <p>sahyadri@sahyadri.edu.in</p>
+            <p>principal@sahyadri.edu.in</p>
+          </div>
+          <div className="footer-section">
+            <h4>Address</h4>
+            <p>Sahyadri Campus, Adyar, Mangaluru</p>
+            <p>Karnataka, India - 575007</p>
+          </div>
+        </div>
       </footer>
+
+      <style jsx>{`
+        .dashboard-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+          position: relative;
+          font-family: "Arial", sans-serif;
+          text-align: center;
+        }
+        .carousel {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -1;
+        }
+        .carousel-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: opacity 1s ease-in-out;
+        }
+        .navbar {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          background: rgba(0, 0, 0, 0.8);
+          padding: 20px;
+          text-align: center;
+          color: white;
+          font-weight: bold;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .nav-links a {
+          margin: 0 15px;
+        }
+        .dashboard-content {
+          background: rgba(173, 216, 230, 0.4);
+          padding: 3rem;
+          border-radius: 10px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+          backdrop-filter: blur(10px);
+          max-width: 500px;
+          margin: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .btn-primary {
+          background: #007bff;
+          color: white;
+          border: none;
+          padding: 14px 24px;
+          cursor: pointer;
+          font-size: 1rem;
+          font-weight: bold;
+          border-radius: 6px;
+          transition: all 0.3s;
+        }
+        .btn-primary:hover {
+          background: #0056b3;
+        }
+        .footer {
+          margin-top: auto;
+          width: 100%;
+          background: #1a1a2e;
+          color: white;
+          padding: 20px 0;
+          text-align: center;
+        }
+        .footer-content {
+          display: flex;
+          justify-content: space-around;
+          flex-wrap: wrap;
+          padding: 20px;
+        }
+      `}</style>
     </div>
   );
 }
