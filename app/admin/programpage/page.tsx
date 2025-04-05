@@ -125,7 +125,7 @@ export default function ProgramDetailPage() {
               <button
                 onClick={() => {
                   setActiveTab(tab as Tab)
-                  setItems([]) // Clear existing items when tab switches
+                  setItems([]) // Reset items when switching tabs
                   setIsEditing(false)
                   setEditIndex(null)
                   setIsAdding(false)
@@ -211,7 +211,7 @@ export default function ProgramDetailPage() {
                     {Object.entries(item).map(([key, val]) => (
                       <div key={key}><strong>{key}:</strong> {String(val)}</div>
                     ))}
-                    {(activeTab === 'hod' || activeTab === 'faculty') && (
+                    {['student', 'faculty'].includes(activeTab) && (
                       <div className="flex space-x-4 mt-2">
                         <button
                           onClick={() => {
@@ -229,6 +229,21 @@ export default function ProgramDetailPage() {
                           className="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600 font-semibold"
                         >
                           Delete
+                        </button>
+                      </div>
+                    )}
+                    {activeTab === 'hod' && (
+                      <div className="flex mt-2">
+                        <button
+                          onClick={() => {
+                            setFormData(item)
+                            setIsEditing(true)
+                            setEditIndex(idx)
+                            setIsAdding(true)
+                          }}
+                          className="bg-[#9B72CF] text-white px-4 py-1 rounded-lg hover:bg-[#7a59b3] font-semibold"
+                        >
+                          Edit
                         </button>
                       </div>
                     )}
