@@ -6,7 +6,6 @@ import { useCallback } from 'react'
 const sections = [
   'Academics',
   'Research',
-  'Administration',
   'Attendance',
   'Mentor-Mentee',
   'Examination',
@@ -17,7 +16,6 @@ type Section = typeof sections[number]
 const sectionRoutes: Record<Section, string> = {
   'Academics': '/associator/dashboard/academics',
   'Research': '/associator/dashboard/research',
-  'Administration': '/associator/dashboard/administration',
   'Attendance': '/associator/dashboard/attendance',
   'Mentor-Mentee': '/associator/dashboard/mentor-mentee',
   'Examination': '/associator/dashboard/examination',
