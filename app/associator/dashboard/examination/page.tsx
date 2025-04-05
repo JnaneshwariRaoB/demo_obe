@@ -4,25 +4,29 @@ import React, { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 // Sidebar Component
-const Sidebar = ({ setActiveForm }: { setActiveForm: React.Dispatch<React.SetStateAction<string | null>> }) => {
+const Sidebar = ({
+  setActiveForm,
+}: {
+  setActiveForm: React.Dispatch<React.SetStateAction<string | null>>
+}) => {
   return (
-    <aside className="w-64 p-6 bg-[#1C152C] border-r border-[#7E5AC8] text-white font-bold">
-      <h2 className="text-xl mb-4">Navigation</h2>
+    <aside className="w-64 p-6 bg-[#1C152C] border-r border-[#7E5AC8]">
+      <h2 className="text-xl font-bold mb-4 text-white">Navigation</h2>
       <button
         onClick={() => setActiveForm('questionPaper')}
-        className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition"
+        className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition text-white font-bold"
       >
         Question Paper
       </button>
       <button
         onClick={() => setActiveForm('markEntry')}
-        className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition"
+        className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition text-white font-bold"
       >
         Mark Entry
       </button>
       <button
         onClick={() => setActiveForm('resultAnalysis')}
-        className="w-full text-left py-2 px-4 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition"
+        className="w-full text-left py-2 px-4 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition text-white font-bold"
       >
         Result Analysis
       </button>
@@ -30,27 +34,38 @@ const Sidebar = ({ setActiveForm }: { setActiveForm: React.Dispatch<React.SetSta
   )
 }
 
-// Question Paper Form (Dummy Data)
+// Question Paper Form
 const QuestionPaperForm = () => {
+  const selectedQP = {
+    module: 'Module 3',
+    totalMarks: 100,
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRJsAMlHa9Hn-ECUUqtT8sieMbT0myYJfseA&s',
+  }
+
   return (
     <div className="p-6 text-white font-bold">
       <h2 className="text-xl mb-4">Question Paper Setup (View Only)</h2>
 
       <div className="mb-4">
         <label className="block mb-1">Selected Module:</label>
-        <span className="bg-[#2F2541] px-3 py-2 rounded inline-block">Module 3</span>
+        <span className="bg-[#2F2541] px-3 py-2 rounded inline-block">
+          {selectedQP.module}
+        </span>
       </div>
 
       <div className="mb-4">
         <label className="block mb-1">Total Marks:</label>
-        <span className="bg-[#2F2541] px-3 py-2 rounded inline-block">100</span>
+        <span className="bg-[#2F2541] px-3 py-2 rounded inline-block">
+          {selectedQP.totalMarks}
+        </span>
       </div>
 
       <div className="mt-6">
         <h3 className="text-lg mb-2">Question Paper Preview:</h3>
         <img
-          src="https://via.placeholder.com/400x300?text=Dummy+Question+Paper"
-          alt="Dummy Preview"
+          src={selectedQP.image}
+          alt="Question Paper Preview"
           className="w-full max-w-md rounded-lg border border-gray-400"
         />
       </div>
@@ -58,7 +73,7 @@ const QuestionPaperForm = () => {
   )
 }
 
-// Mark Entry Form (Dummy Data)
+// Mark Entry Form
 const MarkEntryForm = () => (
   <div className="p-6 text-white font-bold">
     <h2 className="text-xl mb-4">Mark Entry (View Only)</h2>
@@ -70,7 +85,7 @@ const MarkEntryForm = () => (
   </div>
 )
 
-// Result Analysis Form (Dummy Data)
+// Result Analysis Form
 const ResultAnalysisForm = () => (
   <div className="p-6 text-white font-bold">
     <h2 className="text-xl mb-4">Result Analysis (View Only)</h2>
@@ -83,11 +98,11 @@ const ResultAnalysisForm = () => (
   </div>
 )
 
-// Main Page Component
+// Main Component
 export default function CourseResPage() {
   const [activeForm, setActiveForm] = useState<string | null>(null)
   const searchParams = useSearchParams()
-  const courseName = searchParams.get("name") || "Unknown Course"
+  const courseName = searchParams.get('name') || 'Unknown Course'
 
   const renderForm = () => {
     switch (activeForm) {
@@ -98,7 +113,11 @@ export default function CourseResPage() {
       case 'resultAnalysis':
         return <ResultAnalysisForm />
       default:
-        return <p className="text-white font-bold p-6">Please select an option from the sidebar.</p>
+        return (
+          <p className="text-white font-bold p-6">
+            Please select an option from the sidebar.
+          </p>
+        )
     }
   }
 
