@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const courseData = [
+  // ... same data, untouched
   {
     name: 'Calculus I',
     code: 'MA101',
@@ -93,8 +94,7 @@ export default function CoursePage() {
   const courseName = searchParams.get('name')
   const course = courseData.find((c) => c.name === courseName)
 
-  const [view, setView] = useState<'course' | 'vision' | 'closure'>('course')
-  const [closureFiles, setClosureFiles] = useState<File[]>([])
+  const [view, setView] = useState<'course' | 'vision'>('course')
 
   const redirectTo = (path: string) => {
     if (courseName) {
@@ -130,15 +130,7 @@ export default function CoursePage() {
         <button onClick={() => redirectTo('gap')} className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition">Curriculum Gap</button>
         <button onClick={() => redirectTo('beyond')} className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition">Content Beyond Syllabus</button>
         <button onClick={() => redirectTo('action')} className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition">Action</button>
-        <button onClick={() => redirectTo('mapping')} className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition">CO-PO Mapping</button>
-        <button
-          onClick={() => setView('closure')}
-          className={`w-full text-left py-2 px-4 mt-2 rounded-lg ${
-            view === 'closure' ? 'bg-[#7E5AC8]' : 'bg-[#322348]'
-          } hover:bg-[#7E5AC8] transition`}
-        >
-          Closure File
-        </button>
+        <button onClick={() => redirectTo('mapping')} className="w-full text-left py-2 px-4 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition">CO-PO Mapping</button>
       </aside>
 
       {/* Main content */}
@@ -178,18 +170,22 @@ export default function CoursePage() {
               <p className="text-[#BBBBBB] mt-2">The course you're looking for doesn't exist or wasn't passed correctly.</p>
             </div>
           )
-        ) : view === 'vision' ? (
+        ) : (
           <div>
             <h1 className="text-3xl font-bold text-[#EADCF9] mb-6">Department & Institution Overview</h1>
             <div className="bg-[#2B1F3A] p-6 rounded-2xl border border-[#7E5AC8] shadow-lg max-w-4xl space-y-6">
+              {/* Vision, Mission, PEO, PO, PSO sections */}
+              {/* ... Unchanged */}
               <section>
                 <h2 className="text-2xl font-bold text-white mb-2">Vision</h2>
                 <p className="text-[#D2C3ED]">To be a center of excellence in technical education and research, nurturing professionals who contribute to the development of society.</p>
               </section>
+
               <section>
                 <h2 className="text-2xl font-bold text-white mb-2">Mission</h2>
                 <p className="text-[#D2C3ED]">To impart quality education and foster innovation through dedicated teaching and collaborative learning, enabling students to achieve professional competence and ethical values.</p>
               </section>
+
               <section>
                 <h2 className="text-2xl font-bold text-white mb-2">Program Educational Objectives (PEO)</h2>
                 <ul className="list-disc list-inside text-[#D2C3ED] space-y-1">
@@ -198,6 +194,7 @@ export default function CoursePage() {
                   <li>PEO3: Graduates will contribute ethically and responsibly to society through engineering solutions.</li>
                 </ul>
               </section>
+
               <section>
                 <h2 className="text-2xl font-bold text-white mb-2">Program Outcomes (PO)</h2>
                 <ul className="list-decimal list-inside text-[#D2C3ED] space-y-1">
@@ -215,6 +212,7 @@ export default function CoursePage() {
                   <li>Life-long learning</li>
                 </ul>
               </section>
+
               <section>
                 <h2 className="text-2xl font-bold text-white mb-2">Program Specific Outcomes (PSO)</h2>
                 <ul className="list-disc list-inside text-[#D2C3ED] space-y-1">
@@ -222,32 +220,6 @@ export default function CoursePage() {
                   <li>PSO2: Demonstrate proficiency in modern tools and technologies relevant to the discipline.</li>
                 </ul>
               </section>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <h1 className="text-3xl font-bold text-[#EADCF9] mb-6">Upload Closure Files</h1>
-            <div className="bg-[#2B1F3A] p-6 rounded-2xl border border-[#7E5AC8] shadow-lg max-w-3xl space-y-4">
-              <input
-                type="file"
-                multiple
-                onChange={(e) => {
-                  if (e.target.files) {
-                    setClosureFiles(Array.from(e.target.files))
-                  }
-                }}
-                className="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-[#7E5AC8] file:text-white hover:file:bg-[#9A7CED]"
-              />
-              {closureFiles.length > 0 && (
-                <div>
-                  <h2 className="text-xl font-semibold text-white mb-2">Uploaded Files:</h2>
-                  <ul className="list-disc pl-6 text-[#D2C3ED] space-y-1">
-                    {closureFiles.map((file, index) => (
-                      <li key={index}>{file.name}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
           </div>
         )}

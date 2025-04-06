@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   BarChart,
   Bar,
@@ -41,34 +40,40 @@ const studentsByBatch: Record<string, { name: string; usn: string }[]> = {
   ],
 };
 
+const emptyGraphData = Array.from({ length: 12 }, (_, i) => ({
+  name: `PO${i + 1}`,
+  Attained: 0,
+  Target: 0,
+}));
+
 export default function MentorMenteePage() {
   const [selectedBatch, setSelectedBatch] = useState<string | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<{ name: string; usn: string } | null>(null);
   const [selectedSemester, setSelectedSemester] = useState<string>('');
-  const router = useRouter();
+  const [graphData, setGraphData] = useState(emptyGraphData);
 
-  const handleBatchChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedBatch(event.target.value);
+  const handleBatchChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedBatch(e.target.value);
     setSelectedStudent(null);
     setSelectedSemester('');
+    setGraphData(emptyGraphData);
   };
 
-  const handleSemesterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const sem = event.target.value;
-    setSelectedSemester(sem);
-    if (selectedStudent && sem) {
-      router.push(`/semester/${sem}?student=${encodeURIComponent(selectedStudent.usn)}`);
-    }
+  const handleSemesterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const semester = e.target.value;
+    setSelectedSemester(semester);
+
+    // Load dummy data
+    const newData = Array.from({ length: 12 }, (_, i) => ({
+      name: `PO${i + 1}`,
+      Attained: Math.floor(Math.random() * 100),
+      Target: Math.floor(40 + Math.random() * 40),
+    }));
+
+    setGraphData(newData);
   };
 
   const students = selectedBatch ? studentsByBatch[selectedBatch] || [] : [];
-
-  // Dummy data for graph
-  const dummyData = Array.from({ length: 12 }, (_, i) => ({
-    name: `PO${i + 1}`,
-    Attained: Math.floor(Math.random() * 100),
-    Target: Math.floor(40 + Math.random() * 40),
-  }));
 
   return (
     <div className="min-h-screen bg-[#10091a] text-white p-10 font-serif">
@@ -95,64 +100,64 @@ export default function MentorMenteePage() {
             <h2 className="text-2xl font-semibold mb-6 text-[#DCCEFF]">
               Students in Batch {selectedBatch}
             </h2>
-            {students.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {students.map((student, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-[#2A1C4A] p-6 rounded-2xl shadow-md border border-[#A275FF] text-center cursor-pointer hover:bg-[#3B2962]"
-                    onClick={() => setSelectedStudent(student)}
-                  >
-                    <h3 className="text-xl font-bold text-[#F0E5FF]">{student.name}</h3>
-                    <p className="text-[#CDBFF5]">{student.usn}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-center text-[#CDBFF5]">No students found for this batch.</p>
-            )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {students.map((student, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#2A1C4A] p-6 rounded-2xl shadow-md border border-[#A275FF] text-center cursor-pointer hover:bg-[#3B2962]"
+                  onClick={() => setSelectedStudent(student)}
+                >
+                  <h3 className="text-xl font-bold text-[#F0E5FF]">{student.name}</h3>
+                  <p className="text-[#CDBFF5]">{student.usn}</p>
+                </div>
+              ))}
+            </div>
           </>
         )}
 
         {selectedStudent && (
-          <div className="mt-10">
-            <h2 className="text-2xl font-semibold mb-4 text-[#DCCEFF] text-center">
-              Select Semester for {selectedStudent.name}
-            </h2>
-            <div className="flex justify-center">
-              <select
-                onChange={handleSemesterChange}
-                value={selectedSemester}
-                className="w-full max-w-sm p-3 rounded-xl bg-[#2A1C4A] border border-[#A275FF] text-[#EADCF9]"
-              >
-                <option value="">-- Select Semester --</option>
-                {[3, 4, 5, 6, 7, 8].map((sem) => (
-                  <option key={sem} value={sem.toString()}>
-                    Semester {sem}
-                  </option>
-                ))}
-              </select>
+          <>
+            <div className="mt-10">
+              <h2 className="text-2xl font-semibold mb-4 text-[#DCCEFF] text-center">
+                Select Semester for {selectedStudent.name}
+              </h2>
+              <div className="flex justify-center">
+                <select
+                  onChange={handleSemesterChange}
+                  value={selectedSemester}
+                  className="w-full max-w-sm p-3 rounded-xl bg-[#2A1C4A] border border-[#A275FF] text-[#EADCF9]"
+                >
+                  <option value="">-- Select Semester --</option>
+                  {[3, 4, 5, 6, 7, 8].map((sem) => (
+                    <option key={sem} value={sem.toString()}>
+                      Semester {sem}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
-        )}
 
-        <div className="mt-16">
-          <h2 className="text-3xl font-bold mb-6 text-center text-[#EADCF9]">PO Attainment vs Target</h2>
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              data={dummyData}
-              margin={{ top: 10, right: 30, left: 20, bottom: 20 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#3C2E57" />
-              <XAxis dataKey="name" stroke="#D9C7FF" />
-              <YAxis stroke="#D9C7FF" />
-              <Tooltip contentStyle={{ backgroundColor: '#1D1529', borderColor: '#7E5AC8' }} />
-              <Legend />
-              <Bar dataKey="Attained" fill="#7E5AC8" />
-              <Bar dataKey="Target" fill="#F9A826" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+            <div className="mt-16">
+              <h2 className="text-3xl font-bold mb-6 text-center text-[#EADCF9]">
+                PO Attainment vs Target for {selectedStudent.name}
+              </h2>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart
+                  data={graphData}
+                  margin={{ top: 10, right: 30, left: 20, bottom: 20 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#3C2E57" />
+                  <XAxis dataKey="name" stroke="#D9C7FF" />
+                  <YAxis stroke="#D9C7FF" />
+                  <Tooltip contentStyle={{ backgroundColor: '#1D1529', borderColor: '#7E5AC8' }} />
+                  <Legend />
+                  <Bar dataKey="Attained" fill="#7E5AC8" />
+                  <Bar dataKey="Target" fill="#F9A826" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

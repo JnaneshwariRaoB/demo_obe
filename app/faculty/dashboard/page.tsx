@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
+
 const sections = ['Role', 'Profile', 'Leave Module', 'Personal Reports', 'Notifications'] as const
 type Section = typeof sections[number]
 
@@ -28,7 +29,9 @@ export default function DashboardPage() {
     switch (activeSection) {
       case 'Role':
         return (
+          
           <div className="text-lg font-semibold text-[#EADCF9] space-y-4">
+            
             <label htmlFor="roleSelect" className="block text-xl mb-2">
               Select your role:
             </label>
@@ -68,6 +71,16 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0D0B1F] via-[#1A132B] to-[#110A1C] text-white font-serif flex flex-col items-center justify-center p-8">
+      <div className="text-center mb-6 bg-[#3F3147] p-4 rounded-xl shadow-md border border-[#9C88B8]">
+  <h3 className="text-2xl md:text-3xl font-bold text-white drop-shadow-sm">
+    Sahyadri College of Engineering and Management
+  </h3>
+  <h4 className="text-lg md:text-xl font-medium text-[#A786DF] mt-1">
+    Department of Information Science & Engineering
+  </h4>
+</div>
+
+
       <h1 className="text-5xl font-extrabold text-[#EADCF9] mb-12 tracking-wider">Dashboard</h1>
 
       {/* Dashboard Buttons */}

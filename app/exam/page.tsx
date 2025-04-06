@@ -17,6 +17,7 @@ const courseData: {
     }[]
   }
 } = {
+  // ... (same courseData object)
   '2019-20': {
     Odd: [
       {
@@ -109,12 +110,28 @@ const courseData: {
 export default function AcademicsPage() {
   const [selectedYear, setSelectedYear] = useState('')
   const [selectedSemester, setSelectedSemester] = useState('')
-  const router = useRouter() // ✅ MOVED INSIDE FUNCTION
+  const [selectedCourse, setSelectedCourse] = useState<null | { name: string }>(null)
+
+  const router = useRouter()
 
   const courseList =
     selectedYear && selectedSemester
       ? courseData[selectedYear]?.[selectedSemester] || []
       : []
+
+  const handleCourseClick = (course: { name: string }) => {
+    setSelectedCourse(course)
+  }
+
+  const handleAction = (action: 'set' | 'evaluate') => {
+    if (!selectedCourse) return
+    const encodedName = encodeURIComponent(selectedCourse.name)
+    const path =
+      action === 'set'
+        ? `/exam/courseRes?name=${encodedName}`
+        : `/exam/evaluateExam?name=${encodedName}`
+    router.push(path)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0D0B1F] via-[#1A132B] to-[#110A1C] text-white p-8 font-serif">
@@ -172,9 +189,7 @@ export default function AcademicsPage() {
               {courseList.map((course) => (
                 <div
                   key={course.code}
-                  onClick={() =>
-                    router.push(`/exam/courseRes?name=${encodeURIComponent(course.name)}`)
-                  }
+                  onClick={() => handleCourseClick(course)}
                   className="cursor-pointer bg-[#2B1F3A] p-6 rounded-xl border border-[#7E5AC8] hover:shadow-xl transition duration-300"
                 >
                   <h3 className="text-xl font-bold text-[#EADCF9] mb-2">{course.name}</h3>
@@ -190,6 +205,37 @@ export default function AcademicsPage() {
         )
       ) : (
         <p className="mt-8 text-[#9B84D1] text-lg">Please select both Academic Year and Semester to view courses.</p>
+      )}
+
+      {/* Modal */}
+      {selectedCourse && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+          <div className="bg-[#1F1B2E] p-8 rounded-2xl text-center shadow-lg border border-[#7E5AC8]">
+            <h2 className="text-xl font-bold text-[#EADCF9] mb-4">
+              What do you want to do with <span className="text-[#C3A9F4]">{selectedCourse.name}</span>?
+            </h2>
+            <div className="flex justify-center gap-6">
+              <button
+                onClick={() => handleAction('set')}
+                className="bg-[#6D4CAF] hover:bg-[#8563DD] px-5 py-2 rounded-xl font-semibold"
+              >
+                Set Paper
+              </button>
+              <button
+                onClick={() => handleAction('evaluate')}
+                className="bg-[#4C3D8F] hover:bg-[#6A52BC] px-5 py-2 rounded-xl font-semibold"
+              >
+                Evaluate
+              </button>
+              <button
+                onClick={() => setSelectedCourse(null)}
+                className="bg-gray-500 hover:bg-gray-700 px-4 py-2 rounded-xl font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

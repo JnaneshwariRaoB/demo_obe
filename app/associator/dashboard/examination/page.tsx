@@ -1,133 +1,119 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
-// Sidebar Component
-const Sidebar = ({
-  setActiveForm,
-}: {
-  setActiveForm: React.Dispatch<React.SetStateAction<string | null>>
-}) => {
-  return (
-    <aside className="w-64 p-6 bg-[#1C152C] border-r border-[#7E5AC8]">
-      <h2 className="text-xl font-bold mb-4 text-white">Navigation</h2>
-      <button
-        onClick={() => setActiveForm('questionPaper')}
-        className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition text-white font-bold"
-      >
-        Question Paper
-      </button>
-      <button
-        onClick={() => setActiveForm('markEntry')}
-        className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition text-white font-bold"
-      >
-        Mark Entry
-      </button>
-      <button
-        onClick={() => setActiveForm('resultAnalysis')}
-        className="w-full text-left py-2 px-4 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition text-white font-bold"
-      >
-        Result Analysis
-      </button>
-    </aside>
-  )
-}
+const tabs = [
+  "Question paper",
+  "Course Details",
+  "Internal Test 1",
+  "Internal Test 2",
+  "Internal Test 3",
+  "Assignments",
+  "Final Exam",
+];
 
-// Question Paper Form
-const QuestionPaperForm = () => {
-  const selectedQP = {
-    module: 'Module 3',
-    totalMarks: 100,
-    image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRJsAMlHa9Hn-ECUUqtT8sieMbT0myYJfseA&s',
-  }
+export default function EvaluatePage() {
+  const [activeTab, setActiveTab] = useState("Course Details");
+  const [setTarget, setSetTarget] = useState("");
+  const [classTarget, setClassTarget] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [avgCO1, setAvgCO1] = useState("0.00");
+  const [avgCO2, setAvgCO2] = useState("0.00");
 
-  return (
-    <div className="p-6 text-white font-bold">
-      <h2 className="text-xl mb-4">Question Paper Setup (View Only)</h2>
+  const pathname = usePathname();
+  const department = decodeURIComponent(pathname.split("/")[2] || "Unknown");
 
-      <div className="mb-4">
-        <label className="block mb-1">Selected Module:</label>
-        <span className="bg-[#2F2541] px-3 py-2 rounded inline-block">
-          {selectedQP.module}
-        </span>
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-1">Total Marks:</label>
-        <span className="bg-[#2F2541] px-3 py-2 rounded inline-block">
-          {selectedQP.totalMarks}
-        </span>
-      </div>
-
-      <div className="mt-6">
-        <h3 className="text-lg mb-2">Question Paper Preview:</h3>
-        <img
-          src={selectedQP.image}
-          alt="Question Paper Preview"
-          className="w-full max-w-md rounded-lg border border-gray-400"
-        />
-      </div>
-    </div>
-  )
-}
-
-// Mark Entry Form
-const MarkEntryForm = () => (
-  <div className="p-6 text-white font-bold">
-    <h2 className="text-xl mb-4">Mark Entry (View Only)</h2>
-    <ul className="space-y-2">
-      <li className="bg-[#2F2541] p-3 rounded">Student A: 78</li>
-      <li className="bg-[#2F2541] p-3 rounded">Student B: 85</li>
-      <li className="bg-[#2F2541] p-3 rounded">Student C: 92</li>
-    </ul>
-  </div>
-)
-
-// Result Analysis Form
-const ResultAnalysisForm = () => (
-  <div className="p-6 text-white font-bold">
-    <h2 className="text-xl mb-4">Result Analysis (View Only)</h2>
-    <p className="bg-[#2F2541] p-4 rounded leading-relaxed">
-      Average Score: 85 <br />
-      Highest Score: 92 <br />
-      Lowest Score: 65 <br />
-      Remarks: Most students performed well, but improvement is needed in Module 2.
-    </p>
-  </div>
-)
-
-// Main Component
-export default function CourseResPage() {
-  const [activeForm, setActiveForm] = useState<string | null>(null)
-  const searchParams = useSearchParams()
-  const courseName = searchParams.get('name') || 'Unknown Course'
-
-  const renderForm = () => {
-    switch (activeForm) {
-      case 'questionPaper':
-        return <QuestionPaperForm />
-      case 'markEntry':
-        return <MarkEntryForm />
-      case 'resultAnalysis':
-        return <ResultAnalysisForm />
-      default:
-        return (
-          <p className="text-white font-bold p-6">
-            Please select an option from the sidebar.
-          </p>
-        )
+  // Auto-generate random values for Course Details tab
+  useEffect(() => {
+    if (activeTab === "Course Details" && !submitted) {
+      const randomSetTarget = (50 + Math.random() * 30).toFixed(0);
+      const randomClassTarget = (40 + Math.random() * 20).toFixed(0);
+      setSetTarget(randomSetTarget);
+      setClassTarget(randomClassTarget);
+      setSubmitted(true);
     }
-  }
+  }, [activeTab, submitted]);
 
   return (
-    <div className="flex min-h-screen bg-[#1A132B] font-sans">
-      <Sidebar setActiveForm={setActiveForm} />
-      <main className="flex-1 p-6 text-white font-bold">
-        <h1 className="text-2xl mb-6">Course: {courseName}</h1>
-        {renderForm()}
+    <div className="flex min-h-screen bg-[#1F1B2E] text-white">
+      <aside className="w-60 bg-[#322348] p-6 border-r border-[#7E5AC8] space-y-4">
+        <h2 className="text-xl font-semibold mb-4">Evaluate</h2>
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => {
+              setActiveTab(tab);
+              if (tab !== "Course Details") setSubmitted(false); // Reset for other tabs
+            }}
+            className={`block w-full text-left px-4 py-2 rounded-md hover:bg-[#7E5AC8] ${
+              activeTab === tab ? "bg-[#7E5AC8]" : ""
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </aside>
+
+      <main className="flex-1 p-8 space-y-6">
+        <h1 className="text-2xl font-bold text-[#C8B5E9]">
+          Department: {department}
+        </h1>
+
+        {activeTab === "Course Details" && (
+          <div className="bg-[#2B1F3A] p-6 rounded-xl border border-[#7E5AC8] space-y-4">
+            <h2 className="text-xl font-semibold">Evaluation Targets (Auto-Generated)</h2>
+            <div className="mt-6 bg-[#3C2E54] p-4 rounded-lg border border-purple-700 space-y-2">
+              <p>
+                <span className="font-semibold">Set Target (%):</span>{" "}
+                {setTarget}
+              </p>
+              <p>
+                <span className="font-semibold">Class Target (%):</span>{" "}
+                {classTarget}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-6 mt-4">
+          <div className="bg-[#4B3B6B] rounded-lg p-4 shadow-md w-40 text-center">
+            <p className="text-sm text-gray-300">CO1 Attainment</p>
+            <p className="text-2xl font-bold text-green-400">{avgCO1}%</p>
+          </div>
+          <div className="bg-[#4B3B6B] rounded-lg p-4 shadow-md w-40 text-center">
+            <p className="text-sm text-gray-300">CO2 Attainment</p>
+            <p className="text-2xl font-bold text-green-400">{avgCO2}%</p>
+          </div>
+        </div>
+
+        {["Internal Test 1", "Internal Test 2", "Internal Test 3", "Assignments", "Final Exam"].includes(activeTab) && (
+          <div>
+            {/* Replace this with the actual MarksEntry component once defined */}
+            <p className="text-red-500">MarksEntry component is not yet implemented.</p>
+          </div>
+        )}
+
+        {activeTab === "Question paper" && (
+          <div className="bg-[#2B1F3A] p-6 rounded-xl border border-[#7E5AC8] space-y-6">
+            <h2 className="text-xl font-semibold text-[#E0D4FA]">
+              Question Papers
+            </h2>
+            {["CIE 1", "CIE 2", "CIE 3", "Final Exam"].map((title) => (
+              <div key={title} className="border-l-4 border-purple-500 pl-4 py-4 bg-[#3C2E54] rounded-md shadow-md">
+                <h3 className="text-lg font-bold text-orange-300">{title}</h3>
+                <div className="mt-2">
+                  <img
+                    src="https://website-assets.studocu.com/img/document_thumbnails/624696bf8a900f65c3f6d8344cdc960d/thumb_1200_1553.png"
+                    alt={`${title} Paper`}
+                    className="rounded-md border border-purple-700 w-full max-w-md"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
-  )
+  );
 }
