@@ -23,6 +23,27 @@ const facultyMembers = [
     experience: "5 years",
     email: "sneha.k@sahyadri.edu.in",
   },
+  {
+    name: "Mr. Kiran Kumar",
+    designation: "Assistant Professor",
+    qualification: "M.Tech in Artificial Intelligence",
+    experience: "7 years",
+    email: "kiran.kumar@sahyadri.edu.in",
+  },
+  {
+    name: "Ms. Divya P",
+    designation: "Lecturer",
+    qualification: "M.Sc. in Computer Science",
+    experience: "3 years",
+    email: "divya.p@sahyadri.edu.in",
+  },
+  {
+    name: "Dr. Suresh B",
+    designation: "Associate Professor",
+    qualification: "Ph.D. in Software Engineering",
+    experience: "15 years",
+    email: "suresh.b@sahyadri.edu.in",
+  },
 ];
 
 export default function FacultyList() {
@@ -43,7 +64,7 @@ export default function FacultyList() {
         {facultyMembers.map((faculty, index) => (
           <div
             key={index}
-            className="bg-[#3F3147] border border-[#9C88B8] p-6 rounded-xl shadow-md hover:shadow-lg transition"
+            className="bg-[#3F3147] border border-[#9C88B8] p-6 rounded-xl shadow-md transition transform hover:scale-105 hover:shadow-2xl duration-300 ease-in-out"
           >
             <h3 className="text-xl font-bold mb-1">{faculty.name}</h3>
             <p className="text-[#A786DF] font-medium">{faculty.designation}</p>
@@ -58,7 +79,12 @@ export default function FacultyList() {
               </p>
               <p>
                 <span className="font-semibold text-white">Email:</span>{" "}
-                {faculty.email}
+                <a
+                  href={`mailto:${faculty.email}`}
+                  className="text-[#A786DF] hover:underline"
+                >
+                  {faculty.email}
+                </a>
               </p>
             </div>
           </div>
