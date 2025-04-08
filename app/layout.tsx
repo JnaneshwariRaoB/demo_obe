@@ -24,9 +24,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* ✅ Global Banner Image */}
+        <img
+          src="https://sijr.sahyadri.edu.in/images/logo.png"
+          alt="Sahyadri Logo Banner"
+          className="banner-img"
+        />
+
+        {/* ✅ All Pages Rendered Below the Banner */}
         {children}
       </body>
     </html>
