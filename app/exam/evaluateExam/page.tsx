@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const tabs = [
   "Course Details",
@@ -17,12 +17,11 @@ export default function EvaluatePage() {
   const [setTarget, setSetTarget] = useState("");
   const [classTarget, setClassTarget] = useState("");
   const [submitted, setSubmitted] = useState(false);
-
   const [avgCO1, setAvgCO1] = useState("0.00");
   const [avgCO2, setAvgCO2] = useState("0.00");
 
-  const pathname = usePathname();
-  const department = decodeURIComponent(pathname.split("/")[2] || "Unknown");
+  const searchParams = useSearchParams();
+  const courseName = searchParams.get("name") || "Unknown Course";
 
   const handleSubmit = () => setSubmitted(true);
 
@@ -47,7 +46,7 @@ export default function EvaluatePage() {
       {/* Main Content */}
       <main className="flex-1 p-8 space-y-6">
         <h1 className="text-2xl font-bold text-[#C8B5E9]">
-          Department: {department}
+          Course: {courseName}
         </h1>
 
         {activeTab === "Course Details" && (
@@ -60,7 +59,7 @@ export default function EvaluatePage() {
                   type="number"
                   value={setTarget}
                   onChange={(e) => setSetTarget(e.target.value)}
-                  className="w-full p-2 text-black rounded-md"
+                  className="w-full p-2 text-white bg-[#3C2E54] rounded-md"
                   placeholder="e.g., 60"
                   disabled={submitted}
                 />
@@ -71,7 +70,7 @@ export default function EvaluatePage() {
                   type="text"
                   value={classTarget}
                   onChange={(e) => setClassTarget(e.target.value)}
-                  className="w-full p-2 text-black rounded-md"
+                  className="w-full p-2 text-white bg-[#3C2E54] rounded-md"
                   placeholder="e.g., 50"
                   disabled={submitted}
                 />
@@ -101,7 +100,7 @@ export default function EvaluatePage() {
           </div>
         )}
 
-        {/* CO Attainment Cards visible in all tabs */}
+        {/* CO Attainment Cards */}
         <div className="flex gap-6 mt-4">
           <div className="bg-[#4B3B6B] rounded-lg p-4 shadow-md w-40 text-center">
             <p className="text-sm text-gray-300">CO1 Attainment</p>
@@ -126,7 +125,6 @@ export default function EvaluatePage() {
   );
 }
 
-// MarksEntry component (unchanged except for lifting state)
 function MarksEntry({ setAverages }: { setAverages: (co1: string, co2: string) => void }) {
   const initialData = Array.from({ length: 15 }, (_, i) => ({
     usn: `4SF21IS0${(i + 1).toString().padStart(2, "0")}`,
@@ -221,7 +219,7 @@ function MarksEntry({ setAverages }: { setAverages: (co1: string, co2: string) =
                         onChange={(e) =>
                           handleChange(i, k as keyof typeof student["marks"], parseFloat(e.target.value))
                         }
-                        className="w-14 px-1 py-1 text-black rounded"
+                        className="w-14 px-1 py-1 text-white bg-[#3C2E54] rounded"
                       />
                     </td>
                   ))}

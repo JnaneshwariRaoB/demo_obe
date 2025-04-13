@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Aside from '../../components/Aside/Aside'
 
 const pos = [...Array(12)].map((_, i) => `PO${i + 1}`)
 const psos = ['PSO1', 'PSO2']
@@ -48,9 +47,6 @@ export default function MappingPage() {
 
   return (
     <div className="flex min-h-screen bg-[#1A132B] text-white font-sans">
-      {/* Sidebar */}
-      
-
       {/* Main Content */}
       <div className="flex-1 p-8">
         <h1 className="text-3xl font-bold mb-6">CO-PO / PSO Mapping Matrix</h1>
@@ -93,6 +89,26 @@ export default function MappingPage() {
                 </tr>
               ))}
             </tbody>
+
+            {/* Average Row */}
+            <tfoot>
+              <tr className="bg-[#3C2E54] text-white font-semibold">
+                <td className="border border-[#7E5AC8] p-2 text-right">Average</td>
+                {[...pos, ...psos].map(code => {
+                  const values = cos.map(co => parseInt(matrix[co][code].level) || 0)
+                  const filledValues = values.filter(v => v > 0)
+                  const avg =
+                    filledValues.length > 0
+                      ? (filledValues.reduce((a, b) => a + b, 0) / filledValues.length).toFixed(2)
+                      : "-"
+                  return (
+                    <td key={code} className="border border-[#7E5AC8] p-2 text-center text-green-400">
+                      {avg}
+                    </td>
+                  )
+                })}
+              </tr>
+            </tfoot>
           </table>
         </div>
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Aside from '../../components/Aside/Aside'
+
 
 interface Module {
   statement: string
@@ -121,45 +121,42 @@ export default function COSPage() {
           </div>
         )}
 
-        {step === 3 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {modules.map((module, idx) => (
-              <div
-                key={idx}
-                className="bg-[#2B1F3A] p-6 rounded-xl border border-[#7E5AC8] shadow-md space-y-2"
-              >
-                <h3 className="text-lg font-semibold text-white">Module {idx + 1}</h3>
-                <p>
-                  <span className="font-bold text-[#C8B5E9]">CO Statement:</span> {module.statement}
-                </p>
-                <p>
-                  <span className="font-bold text-[#C8B5E9]">Bloom’s Level:</span> {module.bloomsLevel} – {
-                    {
-                      CL1: 'Remember',
-                      CL2: 'Understand',
-                      CL3: 'Apply',
-                      CL4: 'Analyze',
-                      CL5: 'Evaluate',
-                      CL6: 'Create',
-                    }[module.bloomsLevel]
-                  }
-                </p>
-                <button
-                  onClick={() => startEditing(idx)}
-                  className="mt-2 text-sm bg-[#7E5AC8] px-3 py-1 rounded hover:bg-purple-700"
-                >
-                  Edit
-                </button>
-              </div>
-            ))}
-            <button
-              onClick={() => setStep(1)}
-              className="col-span-full bg-[#322348] text-sm px-4 py-2 mt-4 rounded-lg hover:bg-[#7E5AC8]"
-            >
-              Add More Modules
-            </button>
-          </div>
-        )}
+{step === 3 && (
+  <div className="space-y-4">
+    <div className="grid grid-cols-12 text-left font-bold text-white mb-2 px-4">
+      <div className="col-span-1">CO</div>
+      <div className="col-span-9">Statement</div>
+      <div className="col-span-2">Bloom's Level</div>
+    </div>
+    {modules.map((module, idx) => (
+      <div
+        key={idx}
+        className="grid grid-cols-12 items-start bg-[#2B1F3A] border border-[#7E5AC8] rounded-xl p-4 text-white"
+      >
+        <div className="col-span-1 font-bold">CO {idx + 1}:</div>
+        <div className="col-span-9">{module.statement}</div>
+        <div className="col-span-2 font-semibold">
+          {module.bloomsLevel.replace('CL', 'BL')}
+        </div>
+        <div className="col-span-12 mt-2">
+          <button
+            onClick={() => startEditing(idx)}
+            className="text-sm bg-[#7E5AC8] px-3 py-1 rounded hover:bg-purple-700"
+          >
+            Edit
+          </button>
+        </div>
+      </div>
+    ))}
+    <button
+      onClick={() => setStep(1)}
+      className="bg-[#322348] text-sm px-4 py-2 mt-4 rounded-lg hover:bg-[#7E5AC8]"
+    >
+      Add More Modules
+    </button>
+  </div>
+)}
+
       </div>
     </div>
   )

@@ -7,13 +7,21 @@ export default function CourseFacultyMappingPage() {
   const subjects = ['Data Structures', 'COA', 'DBMS', 'Operating Systems', 'DAA']
   const sectionLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
+  const batchIntakeMap: Record<string, number> = {
+    '2022-26': 180,
+    '2023-27': 240,
+    '2024-28': 120
+  }
+
+  const batchOptions = Object.keys(batchIntakeMap)
+
   const [step, setStep] = useState(1)
-  const [intake, setIntake] = useState<number | ''>('') // intake number
-  const [batch, setBatch] = useState('') // current batch
-  const [sections, setSections] = useState<string[]>([]) // current batch sections
-  const [facultyMapping, setFacultyMapping] = useState<any[]>([]) // current batch mapping
-  const [submittedData, setSubmittedData] = useState<any[]>([]) // list of submitted batches
-  const [sampleStudents, setSampleStudents] = useState<Record<string, string[]>>({}) // current student set
+  const [batch, setBatch] = useState('')
+  const [intake, setIntake] = useState<number>(0)
+  const [sections, setSections] = useState<string[]>([])
+  const [facultyMapping, setFacultyMapping] = useState<any[]>([])
+  const [submittedData, setSubmittedData] = useState<any[]>([])
+  const [sampleStudents, setSampleStudents] = useState<Record<string, string[]>>({})
 
   const randomNames = ['Alex', 'Jordan', 'Taylor', 'Riley', 'Casey', 'Morgan', 'Jamie', 'Drew', 'Blake', 'Quinn']
 
@@ -68,8 +76,8 @@ export default function CourseFacultyMappingPage() {
 
   const resetForm = () => {
     setStep(1)
-    setIntake('')
     setBatch('')
+    setIntake(0)
     setSections([])
     setFacultyMapping([])
     setSampleStudents({})
@@ -82,44 +90,29 @@ export default function CourseFacultyMappingPage() {
           Course-Faculty Mapping
         </h2>
 
-        {/* Step 1: Intake */}
+        {/* Step 1: Select Batch */}
         {step === 1 && (
           <div className="text-center">
-            <label className="block text-lg mb-3 font-semibold text-white">Enter Student Intake:</label>
-            <input
-              type="number"
-              value={intake}
-              onChange={(e) => setIntake(Number(e.target.value))}
-              placeholder="e.g., 180"
-              className="p-3 rounded-xl w-60 bg-[#2B1F3A] text-white border border-[#9B72CF] placeholder:text-gray-300"
-            />
-            <button
-              onClick={() => {
-                if (typeof intake === 'number' && intake > 0) {
-                  generateSections(intake)
-                  setStep(2)
-                }
-              }}
-              className="ml-4 px-5 py-2 bg-[#7E5AC8] rounded-xl hover:bg-[#9B72CF] text-white font-bold"
-            >
-              Next
-            </button>
-          </div>
-        )}
-
-        {/* Step 2: Batch Entry */}
-        {step === 2 && (
-          <div className="text-center">
-            <label className="block text-lg mb-3 font-semibold text-white">Enter Batch:</label>
-            <input
-              type="text"
+            <label className="block text-lg mb-3 font-semibold text-white">Select Batch:</label>
+            <select
               value={batch}
               onChange={(e) => setBatch(e.target.value)}
-              placeholder="e.g., 2022-26"
-              className="p-3 rounded-xl w-60 bg-[#2B1F3A] text-white border border-[#9B72CF] placeholder:text-gray-300"
-            />
+              className="p-3 rounded-xl w-60 bg-[#2B1F3A] text-white border border-[#9B72CF]"
+            >
+              <option value="">-- Select Batch --</option>
+              {batchOptions.map((b) => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
             <button
-              onClick={() => setStep(3)}
+              onClick={() => {
+                const intakeForBatch = batchIntakeMap[batch]
+                if (batch && intakeForBatch) {
+                  setIntake(intakeForBatch)
+                  generateSections(intakeForBatch)
+                  setStep(3)
+                }
+              }}
               disabled={!batch}
               className="ml-4 px-5 py-2 bg-[#7E5AC8] rounded-xl hover:bg-[#9B72CF] text-white font-bold"
             >
@@ -131,7 +124,7 @@ export default function CourseFacultyMappingPage() {
         {/* Step 3: Show Sections */}
         {step === 3 && (
           <div className="text-center">
-            <h3 className="text-xl font-bold mb-4">Generated Sections:</h3>
+            <h3 className="text-xl font-bold mb-4">Generated Sections for {batch}:</h3>
             <div className="flex justify-center space-x-4 text-lg mb-6">
               {sections.map((sec) => (
                 <span key={sec} className="px-3 py-1 bg-[#3A2952] rounded-xl">{sec}</span>

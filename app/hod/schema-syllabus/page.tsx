@@ -163,8 +163,8 @@ export default function SchemaManager() {
                 className="w-full p-3 rounded-lg bg-[#2B1F3A] border border-[#9B72CF]"
               >
                 <option value="">-- Choose Schema --</option>
-                <option value="R2021">R2021</option>
-                <option value="R2017">R2017</option>
+                <option value="2021">2021</option>
+                <option value="2017">2017</option>
                 <option value="Autonomous">Autonomous</option>
               </select>
             </div>

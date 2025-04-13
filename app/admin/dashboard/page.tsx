@@ -53,13 +53,7 @@ export default function AdminDashboard() {
   return (
     <>
       {/* Image Logo Header */}
-      <div className="w-full bg-white flex justify-center items-center">
-  <img
-    src="https://sijr.sahyadri.edu.in/images/logo.png"
-    alt="Sahyadri Logo Banner"
-    className="w-full h-40 object-contain"
-  />
-</div>
+      
 
       {/* Main Dashboard */}
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#2C2233] to-[#3F2D47] p-8 font-serif text-white font-bold">
