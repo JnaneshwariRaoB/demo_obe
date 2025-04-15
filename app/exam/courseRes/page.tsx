@@ -30,7 +30,7 @@ const Sidebar = ({ setActiveForm }: { setActiveForm: React.Dispatch<React.SetSta
   )
 }
 
-// Question Paper Form (Updated)
+// Question Paper Form
 const QuestionPaperForm = () => {
   const [cie, setCie] = useState<string>("CIE1")
   const [numModules, setNumModules] = useState<number>(0)
@@ -76,12 +76,12 @@ const QuestionPaperForm = () => {
   }
 
   return (
-    <div className="p-6 text-white">
+    <div className="p-6">
       <h2 className="text-xl font-bold mb-4">Question Paper Setup</h2>
 
       <label className="block mb-2">Select CIE</label>
       <select
-        className="w-full mb-4 p-2 rounded-md text-black"
+        className="w-full mb-4 p-2 rounded-md text-white"
         value={cie}
         onChange={e => setCie(e.target.value)}
       >
@@ -93,7 +93,7 @@ const QuestionPaperForm = () => {
       <label className="block mb-2">Enter Number of Modules</label>
       <input
         type="number"
-        className="w-full mb-4 p-2 rounded-md text-black"
+        className="w-full mb-4 p-2 rounded-md text-white"
         value={numModules}
         onChange={e => setNumModules(Number(e.target.value))}
       />
@@ -109,7 +109,7 @@ const QuestionPaperForm = () => {
           <label className="block mb-2">Module Name</label>
           <input
             type="text"
-            className="w-full mb-4 p-2 rounded-md text-black"
+            className="w-full mb-4 p-2 rounded-md text-white"
             value={mod.name}
             onChange={e => handleModuleChange(modIdx, "name", e.target.value)}
           />
@@ -117,7 +117,7 @@ const QuestionPaperForm = () => {
           <label className="block mb-2">Number of Questions</label>
           <input
             type="number"
-            className="w-full mb-4 p-2 rounded-md text-black"
+            className="w-full mb-4 p-2 rounded-md text-white"
             value={mod.questions.length}
             onChange={e => handleQuestionCountChange(modIdx, Number(e.target.value))}
           />
@@ -127,7 +127,7 @@ const QuestionPaperForm = () => {
               <label className="block mb-1">Question {quesIdx + 1} Marks</label>
               <input
                 type="number"
-                className="w-full p-2 rounded-md text-black"
+                className="w-full p-2 rounded-md text-white"
                 value={mark}
                 onChange={e => handleQuestionMarkChange(modIdx, quesIdx, Number(e.target.value))}
               />
@@ -172,19 +172,19 @@ const QuestionPaperForm = () => {
 
 // Mark Entry Form
 const MarkEntryForm = () => (
-  <div className="p-6 text-white">
+  <div className="p-6">
     <h2 className="text-xl font-bold mb-4">Mark Entry</h2>
     <label className="block mb-2">Enter marks</label>
-    <input className="w-full p-2 rounded-md text-black" type="text" />
+    <input className="w-full p-2 rounded-md text-white" type="text" />
   </div>
 )
 
 // Result Analysis Form
 const ResultAnalysisForm = () => (
-  <div className="p-6 text-white">
+  <div className="p-6">
     <h2 className="text-xl font-bold mb-4">Result Analysis</h2>
     <label className="block mb-2">Upload/Describe Analysis</label>
-    <textarea className="w-full p-2 rounded-md text-black" rows={4} />
+    <textarea className="w-full p-2 rounded-md text-white" rows={4} />
   </div>
 )
 
@@ -204,14 +204,14 @@ export default function CourseResPage() {
       case 'resultAnalysis':
         return <ResultAnalysisForm />
       default:
-        return <p className="text-white p-6">Please select an option from the sidebar.</p>
+        return <p className="p-6">Please select an option from the sidebar.</p>
     }
   }
 
   return (
-    <div className="flex min-h-screen bg-[#1A132B] font-sans">
+    <div className="flex min-h-screen bg-[#1A132B] font-sans text-white">
       <Sidebar setActiveForm={setActiveForm} />
-      <main className="flex-1 p-6 text-white">
+      <main className="flex-1 p-6">
         <h1 className="text-2xl font-bold mb-6">Course: {courseName}</h1>
         {renderForm()}
       </main>
