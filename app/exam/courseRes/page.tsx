@@ -30,56 +30,140 @@ const Sidebar = ({ setActiveForm }: { setActiveForm: React.Dispatch<React.SetSta
   )
 }
 
-// Question Paper Form
+// Question Paper Form (Updated)
 const QuestionPaperForm = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [cie, setCie] = useState<string>("CIE1")
+  const [numModules, setNumModules] = useState<number>(0)
+  const [modules, setModules] = useState<any[]>([])
+  const [results, setResults] = useState<any[]>([])
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setSelectedFile(file)
-      setPreviewUrl(URL.createObjectURL(file))
+  const handleModuleChange = (index: number, field: string, value: any) => {
+    const updatedModules = [...modules]
+    updatedModules[index] = {
+      ...updatedModules[index],
+      [field]: value,
+      questions: updatedModules[index]?.questions || [],
     }
+    setModules(updatedModules)
+  }
+
+  const handleQuestionCountChange = (index: number, count: number) => {
+    const updatedModules = [...modules]
+    updatedModules[index].questions = Array.from({ length: count }, (_, i) => updatedModules[index].questions?.[i] || "")
+    setModules(updatedModules)
+  }
+
+  const handleQuestionMarkChange = (modIdx: number, quesIdx: number, value: number) => {
+    const updatedModules = [...modules]
+    updatedModules[modIdx].questions[quesIdx] = value
+    setModules(updatedModules)
+  }
+
+  const generateModules = () => {
+    const mods = Array.from({ length: numModules }, () => ({ name: "", questions: [] }))
+    setModules(mods)
+  }
+
+  const handleSubmit = () => {
+    const result = {
+      cie,
+      modules,
+    }
+    setResults(prev => [...prev, result])
+    setCie("CIE1")
+    setNumModules(0)
+    setModules([])
   }
 
   return (
     <div className="p-6 text-white">
       <h2 className="text-xl font-bold mb-4">Question Paper Setup</h2>
 
-      <label className="block mb-2">Select Module</label>
-      <select className="w-full mb-4 p-2 rounded-md text-black">
-        <option value="">-- Select Module --</option>
-        {[1,1.5, 2,2.5 , 3,3.5, 4,4.5 , 5].map(num => (
-          <option key={num} value={`Module ${num}`}>{`Module ${num}`}</option>
-        ))}
+      <label className="block mb-2">Select CIE</label>
+      <select
+        className="w-full mb-4 p-2 rounded-md text-black"
+        value={cie}
+        onChange={e => setCie(e.target.value)}
+      >
+        <option value="CIE1">CIE1</option>
+        <option value="CIE2">CIE2</option>
+        <option value="CIE3">CIE3</option>
       </select>
 
-      <label className="block mb-2">Total Marks</label>
+      <label className="block mb-2">Enter Number of Modules</label>
       <input
         type="number"
         className="w-full mb-4 p-2 rounded-md text-black"
-        placeholder="Enter total marks"
+        value={numModules}
+        onChange={e => setNumModules(Number(e.target.value))}
       />
+      <button
+        onClick={generateModules}
+        className="mb-6 px-4 py-2 bg-[#7E5AC8] rounded-lg hover:bg-[#9B79E2] transition"
+      >
+        Setup Modules
+      </button>
 
-      
-
-      <label className="block mb-2">Upload File (Question Paper / Scheme)</label>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="w-full mb-4 p-2 rounded-md text-white"
-      />
-
-      {previewUrl && (
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold mb-2">Preview:</h3>
-          <img
-            src={previewUrl}
-            alt="Uploaded Preview"
-            className="w-full max-w-md rounded-lg border border-gray-400"
+      {modules.map((mod, modIdx) => (
+        <div key={modIdx} className="mb-6 border p-4 rounded-lg bg-[#2A1D3F]">
+          <label className="block mb-2">Module Name</label>
+          <input
+            type="text"
+            className="w-full mb-4 p-2 rounded-md text-black"
+            value={mod.name}
+            onChange={e => handleModuleChange(modIdx, "name", e.target.value)}
           />
+
+          <label className="block mb-2">Number of Questions</label>
+          <input
+            type="number"
+            className="w-full mb-4 p-2 rounded-md text-black"
+            value={mod.questions.length}
+            onChange={e => handleQuestionCountChange(modIdx, Number(e.target.value))}
+          />
+
+          {mod.questions.map((mark: any, quesIdx: number) => (
+            <div key={quesIdx} className="mb-2">
+              <label className="block mb-1">Question {quesIdx + 1} Marks</label>
+              <input
+                type="number"
+                className="w-full p-2 rounded-md text-black"
+                value={mark}
+                onChange={e => handleQuestionMarkChange(modIdx, quesIdx, Number(e.target.value))}
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+
+      {modules.length > 0 && (
+        <button
+          onClick={handleSubmit}
+          className="px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 transition"
+        >
+          Save Setup
+        </button>
+      )}
+
+      {/* Display Saved Results */}
+      {results.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-xl font-bold mb-4">Saved CIE Setups</h3>
+          {results.map((res, i) => (
+            <div key={i} className="mb-6 p-4 rounded-lg bg-[#3A2C53] border border-[#7E5AC8]">
+              <h4 className="text-lg font-semibold mb-2">{res.cie}</h4>
+              {res.modules.map((mod: any, idx: number) => (
+                <div key={idx} className="mb-3">
+                  <p className="font-medium text-[#EADCF9]">Module: {mod.name}</p>
+                  <ul className="list-disc ml-6">
+                    {mod.questions.map((mark: number, qIdx: number) => (
+                      <li key={qIdx}>Q{qIdx + 1}: {mark} marks</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       )}
     </div>
