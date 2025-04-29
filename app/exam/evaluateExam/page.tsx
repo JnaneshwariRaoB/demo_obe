@@ -27,7 +27,6 @@ export default function EvaluatePage() {
 
   return (
     <div className="flex min-h-screen bg-[#1F1B2E] text-white">
-      {/* Sidebar */}
       <aside className="w-60 bg-[#322348] p-6 border-r border-[#7E5AC8] space-y-4">
         <h2 className="text-xl font-semibold mb-4">Evaluate</h2>
         {tabs.map((tab) => (
@@ -43,7 +42,6 @@ export default function EvaluatePage() {
         ))}
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-8 space-y-6">
         <h1 className="text-2xl font-bold text-[#C8B5E9]">
           Course: {courseName}
@@ -100,7 +98,6 @@ export default function EvaluatePage() {
           </div>
         )}
 
-        {/* CO Attainment Cards */}
         <div className="flex gap-6 mt-4">
           <div className="bg-[#4B3B6B] rounded-lg p-4 shadow-md w-40 text-center">
             <p className="text-sm text-gray-300">CO1 Attainment</p>
@@ -156,6 +153,9 @@ function MarksEntry({ setAverages }: { setAverages: (co1: string, co2: string) =
   const totalCO2List = data.map((d) =>
     getTotal(d.marks, ["3a", "3b", "4a", "4b"])
   );
+  const totalAllList = data.map((d) =>
+    getTotal(d.marks, ["1a", "1b", "2a", "2b", "3a", "3b", "4a", "4b"])
+  );
 
   const avgCO1 = (
     totalCO1List.reduce((a, b) => a + b, 0) / data.length
@@ -172,15 +172,17 @@ function MarksEntry({ setAverages }: { setAverages: (co1: string, co2: string) =
     <div className="bg-[#2B1F3A] p-6 rounded-xl border border-[#7E5AC8]">
       <h2 className="text-xl font-bold mb-4">Marks Entry by Sub-Question</h2>
       <div className="overflow-auto">
-        <table className="min-w-[1000px] w-full border-collapse text-sm text-white">
+        <table className="min-w-[1100px] w-full border-collapse text-sm text-white">
           <thead>
             <tr className="bg-orange-700 text-center">
               <th rowSpan={3} className="border p-2">USN</th>
               <th rowSpan={3} className="border p-2">Name</th>
               <th colSpan={4} className="border p-2">C304.2</th>
-              <th rowSpan={3} className="border p-2">Total CO1</th>
+              
               <th colSpan={4} className="border p-2">C304.3</th>
+              <th rowSpan={3} className="border p-2">Total CO1</th>
               <th rowSpan={3} className="border p-2">Total CO2</th>
+              <th rowSpan={3} className="border p-2 bg-green-900">Total</th>
             </tr>
             <tr className="bg-orange-600 text-center">
               <th className="border p-2">1a</th>
@@ -207,6 +209,7 @@ function MarksEntry({ setAverages }: { setAverages: (co1: string, co2: string) =
             {data.map((student, i) => {
               const totalCO1 = totalCO1List[i];
               const totalCO2 = totalCO2List[i];
+              const total = (totalAllList[i] / 3).toFixed(2);
               return (
                 <tr key={i} className="text-center border-t">
                   <td className="border p-2">{student.usn}</td>
@@ -225,6 +228,7 @@ function MarksEntry({ setAverages }: { setAverages: (co1: string, co2: string) =
                   ))}
                   <td className="border p-2 font-semibold">{totalCO1}</td>
                   <td className="border p-2 font-semibold">{totalCO2}</td>
+                  <td className="border p-2 font-semibold bg-green-900">{total}</td>
                 </tr>
               );
             })}
@@ -235,6 +239,7 @@ function MarksEntry({ setAverages }: { setAverages: (co1: string, co2: string) =
               <td className="border p-2 text-green-400">{avgCO1}</td>
               <td colSpan={4} className="p-2 border text-right">Average CO2</td>
               <td className="border p-2 text-green-400">{avgCO2}</td>
+              <td className="border p-2 bg-green-900">0.00</td>
             </tr>
           </tfoot>
         </table>

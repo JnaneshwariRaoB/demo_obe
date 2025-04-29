@@ -75,7 +75,7 @@ export default function MappingPage() {
                         value={matrix[co][code].level}
                         onChange={e => handleLevelChange(co, code, e.target.value)}
                         disabled={submitted}
-                        className="w-full p-1 rounded-md text-black disabled:bg-gray-300"
+                        className="w-full p-1 rounded-md text-white bg-[#2B1F3A] disabled:bg-gray-500"
                       >
                         <option value="">-</option>
                         {levels.map(lvl => (
@@ -102,7 +102,7 @@ export default function MappingPage() {
                       ? (filledValues.reduce((a, b) => a + b, 0) / filledValues.length).toFixed(2)
                       : "-"
                   return (
-                    <td key={code} className="border border-[#7E5AC8] p-2 text-center text-green-400">
+                    <td key={code} className="border border-[#7E5AC8] p-2 text-center text-white">
                       {avg}
                     </td>
                   )

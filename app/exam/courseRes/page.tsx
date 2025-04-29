@@ -14,12 +14,12 @@ const Sidebar = ({ setActiveForm }: { setActiveForm: React.Dispatch<React.SetSta
       >
         Question Paper
       </button>
-      <button
+      {/* <button
         onClick={() => setActiveForm('markEntry')}
         className="w-full text-left py-2 px-4 mb-2 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition"
       >
         Mark Entry
-      </button>
+      </button> */}
       <button
         onClick={() => setActiveForm('resultAnalysis')}
         className="w-full text-left py-2 px-4 rounded-lg bg-[#322348] hover:bg-[#7E5AC8] transition"
